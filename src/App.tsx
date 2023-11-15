@@ -1,4 +1,5 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import './App.css';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 /* Core CSS required for Ionic components to work properly */
@@ -22,8 +23,12 @@ import './theme/variables.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import 'swiper/swiper-bundle.min.css';
-import Menu from './pages/Menu';
+import Menu from './Menu';
 
+// @ts-ignore
+import { AuthContextProvider } from './context/AuthContext';
+
+import ProtectedRoute from './components/ProtectedRoute';
 
 setupIonicReact();
 
@@ -31,11 +36,15 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path='/'>
-          <Login />
-        </Route>
-        <Route component={Register} path='/register' exact />
-        <Route component={Menu} path='/app' exact />
+        <AuthContextProvider>
+          <Route path='/'>
+            <Login />
+          </Route>
+          <Route component={Register} path='/register' exact />
+          <ProtectedRoute>
+            <Route component={Menu} path='/menu' exact />
+          </ProtectedRoute>
+        </AuthContextProvider>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

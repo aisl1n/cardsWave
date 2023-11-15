@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Agbalumo&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+.cardModal {
+  height: 88vh;
+  width: 100%;
+  margin: 0 auto;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.cardModalTitle {
+  font-family: 'Agbalumo', cursive;
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.cardModalSubtitle {
+
+}
+
+.cardModalMain p {
+  font-size: 1rem;
+  font-weight: 600;
+}
+

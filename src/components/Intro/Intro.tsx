@@ -2,9 +2,9 @@ import { IonButton, IonText } from '@ionic/react';
 import './Intro.css';
 import React from 'react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import cardIntro from '../assets/cardIntro.svg';
-import cellIntro from '../assets/cellIntro.svg';
-import coffeeIntro from '../assets/coffeeIntro.svg';
+import cardIntro from '../../assets/cardIntro.svg'
+import cellIntro from '../../assets/cellIntro.svg';
+import coffeeIntro from '../../assets/coffeeIntro.svg';
 
 interface ContainerProps {
   onFinish: () => void;

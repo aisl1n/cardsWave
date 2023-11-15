@@ -1,0 +1,14 @@
+.card-wave-banner {
+  display: flex;
+}
+.card-wave-title img {
+  width: 20rem;
+  height: 10rem;
+  margin: 0 30px;
+}
+.card-wave-logo img {
+  flex: 1;
+  width: 30rem;
+  height: 10rem;
+  margin: 0rem;
+}

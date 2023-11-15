@@ -1,0 +1,11 @@
+.cardTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cardTitle p {
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+}

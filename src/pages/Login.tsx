@@ -16,15 +16,23 @@ import {
 import { eyeOutline, logInOutline, personCircleOutline } from 'ionicons/icons';
 import cardsWaveLogo from '../assets/cardsWaveLogo.svg';
 import React, { useEffect, useState } from 'react';
-import Intro from '../components/Intro';
+import Intro from '../components/Intro/Intro';
 import { Preferences } from '@capacitor/preferences';
+
+// @ts-ignore
+import { UserAuth } from '../context/AuthContext';
+import CardWaveBanner from '../components/CardWaveBanner/CardWaveBanner';
 
 const INTRO_KEY = 'intro-seen';
 
 const Login: React.FC = () => {
+  const { signIn } = UserAuth();
   const router = useIonRouter();
   const [introSeen, setIntroSeen] = useState(true);
   const [present, dismiss] = useIonLoading();
+
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
   useEffect(() => {
     const checkStorage = async () => {
@@ -34,17 +42,23 @@ const Login: React.FC = () => {
     checkStorage();
   }, []);
 
-  const doLogin = async (event: any) => {
+  const handleLogin = async (event: any) => {
     event.preventDefault();
     await present('Logging in...');
-    setTimeout(() => {
+    try {
+      await signIn(loginEmail, loginPassword);
       dismiss();
-      router.push('/app', 'root');
-    }, 2000)
+      setLoginEmail('');
+      setLoginPassword('');
+      router.push('/menu', 'root');
+    } catch (e: any) {
+      dismiss();
+      console.log(e.message);
+    }
   };
 
   const finishIntro = async () => {
-    console.log('FIN');
+    console.log('finish the intro');
     setIntroSeen(true);
     Preferences.set({ key: INTRO_KEY, value: 'true' });
   };
@@ -54,55 +68,68 @@ const Login: React.FC = () => {
     Preferences.remove({ key: INTRO_KEY });
   };
 
+  const handleEmailChange = (event: CustomEvent) => {
+    console.log('Email: ' + event.detail.value);
+    setLoginEmail(event.detail.value);
+  };
+
+  const handlePasswordChange = (event: CustomEvent) => {
+    console.log('Senha: ' + event.detail.value);
+    setLoginPassword(event.detail.value);
+  };
+
   return (
     <>
       {!introSeen ? (
         <Intro onFinish={finishIntro} />
-      ) : (
+      ) : ( 
         <IonPage>
           <IonHeader>
             <IonToolbar color={'primary'}>
-              <IonTitle>CardsWave </IonTitle>
+              <CardWaveBanner />
             </IonToolbar>
           </IonHeader>
 
           <IonContent scrollY={false}>
-            <div className='ion-text-center ion-padding'>
-              <img src={cardsWaveLogo} alt='logo' width={'70%'} />
-            </div>
+            <h1 className='ion-text-lg'>
+              Login
+            </h1>
             <IonCard>
               <IonCardContent>
-                <form onSubmit={doLogin}>
+                <form onSubmit={handleLogin}>
                   <IonInput
                     fill='outline'
                     labelPlacement='floating'
                     label='Email'
                     type='email'
                     placeholder='admin@gmail.com'
+                    value={loginEmail}
+                    onIonInput={handleEmailChange}
                   ></IonInput>
                   <IonInput
                     className='ion-margin-top'
                     fill='outline'
                     labelPlacement='floating'
-                    label='Password'
+                    label='Senha'
                     type='password'
+                    value={loginPassword}
+                    onIonInput={handlePasswordChange}
                   ></IonInput>
                   <IonButton
                     className='ion-margin-top'
                     type='submit'
                     expand='block'
                   >
-                    Login
+                    Entrar
                     <IonIcon icon={logInOutline} slot='end' />
                   </IonButton>
                   <IonButton
                     routerLink='/register'
                     color={'tertiary'}
                     className='ion-margin-top'
-                    type='submit'
                     expand='block'
                   >
-                    Create account
+                    Criar conta
                     <IonIcon icon={personCircleOutline} slot='end' />
                   </IonButton>
                   <IonButton

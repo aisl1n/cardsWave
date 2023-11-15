@@ -13,49 +13,76 @@ import {
   IonToolbar,
   useIonRouter,
 } from '@ionic/react';
-import { checkmarkOutline, logInOutline, personCircleOutline } from 'ionicons/icons';
-import cardsWaveLogo from '../assets/cardsWaveLogo.svg';
-import React from 'react';
+import { checkmarkOutline } from 'ionicons/icons';
+import React, { useState } from 'react';
+
+// @ts-ignore
+import { UserAuth } from '../context/AuthContext';
+import CardWaveBanner from '../components/CardWaveBanner/CardWaveBanner';
 
 const Register: React.FC = () => {
   const router = useIonRouter();
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const doRegister = (event: any) => {
+  const { createUser } = UserAuth();
+
+  const register = async (event: any) => {
+    console.log('Email: ' + registerEmail);
+    console.log('Senha: ' + registerPassword);
     event.preventDefault();
-    console.log('doRegister');
-    router.goBack();
+    setError('');
+    try {
+      await createUser(registerEmail, registerPassword);
+      router.goBack();
+    } catch (e: any) {
+      setError(e.message);
+      console.log(e.message);
+    }
   };
+
+  const handleEmailChange = (event: CustomEvent) => {
+    console.log('Email: ' + event.detail.value);
+    setRegisterEmail(event.detail.value);
+  };
+
+  const handlePasswordChange = (event: CustomEvent) => {
+    console.log('Senha: ' + event.detail.value);
+    setRegisterPassword(event.detail.value);
+  };
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color={'primary'}>
           <IonButtons slot='start'>
-            <IonBackButton defaultHref='/' />
-            </IonButtons>
-          <IonTitle>Create account</IonTitle>
+            <IonBackButton text='Voltar' defaultHref='/' />
+          </IonButtons>
+          <CardWaveBanner />
         </IonToolbar>
       </IonHeader>
 
       <IonContent scrollY={false}>
-        <div className='ion-text-center ion-padding'>
-          <img src={cardsWaveLogo} alt='logo' width={'70%'} />
-        </div>
+        <h1 className='ion-text-lg'>Registrar</h1>
         <IonCard>
           <IonCardContent>
-            <form onSubmit={doRegister}>
+            <form onSubmit={register}>
               <IonInput
                 fill='outline'
                 labelPlacement='floating'
                 label='Email'
                 type='email'
                 placeholder='admin@gmail.com'
+                onIonInput={handleEmailChange}
               ></IonInput>
               <IonInput
                 className='ion-margin-top'
                 fill='outline'
                 labelPlacement='floating'
-                label='Password'
+                label='Senha'
                 type='password'
+                onIonInput={handlePasswordChange}
               ></IonInput>
               <IonButton
                 className='ion-margin-top'
