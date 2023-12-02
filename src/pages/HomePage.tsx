@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonToolbar } from '@ionic/react';
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonList,
+  IonToolbar,
+} from '@ionic/react';
 import HeaderBanner from '../components/HeaderBanner/HeaderBanner';
 import LogoutButton from '../components/LogoutButton/LogoutButton';
 import { collection, getDocs, deleteDoc } from 'firebase/firestore';
@@ -16,6 +22,7 @@ const HomePage = () => {
     title: '',
     subtitle: '',
     main: '',
+    imageURL: '',
   });
 
   const cardsCollectionRef = collection(db, 'cards');
@@ -34,20 +41,29 @@ const HomePage = () => {
 
   useEffect(() => {
     getCardsList();
-  }, []);
+  }, [modalState]);
 
   const openModal = (
     id: string,
     color: string,
     title: string,
     subtitle: string,
-    main: string
+    main: string,
+    imageURL: string
   ) => {
-    setModalState({ isOpen: true, color, id, title, subtitle, main });
+    setModalState({ isOpen: true, color, id, title, subtitle, main, imageURL });
   };
 
   const closeModal = () => {
-    setModalState({ isOpen: false, id: '', color: '', title: '', subtitle: '', main: '' });
+    setModalState({
+      isOpen: false,
+      id: '',
+      color: '',
+      title: '',
+      subtitle: '',
+      main: '',
+      imageURL: '',
+    });
   };
 
   const selectCardColor = (index: number) => {
@@ -60,7 +76,7 @@ const HomePage = () => {
     const colorIndex = index % colorKeys.length;
     const color = cardColors[colorKeys[colorIndex]];
     return color;
-  }
+  };
 
   return (
     <>
@@ -70,23 +86,31 @@ const HomePage = () => {
           <LogoutButton />
         </IonToolbar>
       </IonHeader>
-
-      <IonContent>
-        {cardsList.map((card: any, index: number) => {
-          const color = selectCardColor(index);
-          return (
-            <Card
-              key={card.id}
-              id={card.id}
-              color={color}
-              title={card.title}
-              subtitle={card.subtitle}
-              onCardClick={(id: string) =>
-                openModal(id, color, card.title, card.subtitle, card.main)
-              }
-            />
-          );
-        })}
+      <IonContent fullscreen >
+        <IonList lines='none'style={{ marginBottom: '20rem' }}>
+          {cardsList.map((card: any, index: number) => {
+            const color = selectCardColor(index);
+            return (
+              <Card
+                key={card.id}
+                id={card.id}
+                color={color}
+                title={card.title}
+                subtitle={card.subtitle}
+                onCardClick={(id: string) =>
+                  openModal(
+                    id,
+                    color,
+                    card.title,
+                    card.subtitle,
+                    card.main,
+                    card.imageURL
+                  )
+                }
+              />
+            );
+          })}
+        </IonList>
       </IonContent>
       <CardModal
         isOpen={modalState.isOpen}
@@ -96,6 +120,7 @@ const HomePage = () => {
         title={modalState.title}
         subtitle={modalState.subtitle}
         main={modalState.main}
+        imageURL={modalState.imageURL}
       />
     </>
   );

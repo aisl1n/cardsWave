@@ -27,6 +27,7 @@ interface ModalProps {
   title: string;
   subtitle: string;
   main: string;
+  imageURL: string;
 }
 
 const CardModal: React.FC<ModalProps> = ({
@@ -37,6 +38,7 @@ const CardModal: React.FC<ModalProps> = ({
   title,
   subtitle,
   main,
+  imageURL,
 }) => {
   const router = useIonRouter();
 
@@ -71,6 +73,7 @@ const CardModal: React.FC<ModalProps> = ({
       </IonHeader>
       <IonContent className='ion-padding'>
         <IonCard color={color} key={id} className='cardModal'>
+        <img alt="Card header image" src={imageURL} />
           <IonCardHeader>
             <IonCardTitle className='cardModalTitle ion-align-self-center'>
               {title}

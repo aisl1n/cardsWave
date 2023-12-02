@@ -2,6 +2,9 @@ import { Route } from 'react-router-dom';
 import './App.css';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -31,6 +34,8 @@ import { AuthContextProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 setupIonicReact();
+
+defineCustomElements(window);
 
 const App: React.FC = () => (
   <IonApp>
